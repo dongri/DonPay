@@ -6,6 +6,7 @@ public class PlayerListItem {
 
     private Bitmap mThumbnail = null;
     private String mTitle = null;
+    private Boolean mVisible = true;
 
     /**
      * 空のコンストラクタ
@@ -24,7 +25,7 @@ public class PlayerListItem {
 
     /**
      * サムネイル画像を設定
-     * @param thumbnail サムネイル画像
+     * @param thumbnail サムネイルZ画像
      */
     public void setThumbnail(Bitmap thumbnail) {
         mThumbnail = thumbnail;
@@ -34,7 +35,7 @@ public class PlayerListItem {
      * タイトルを設定
      * @param title タイトル
      */
-    public void setmTitle(String title) {
+    public void setTitle(String title) {
         mTitle = title;
     }
 
@@ -52,6 +53,14 @@ public class PlayerListItem {
      */
     public String getTitle() {
         return mTitle;
+    }
+
+    public Boolean getVisible() {
+        return mVisible;
+    }
+
+    public void setVisible(Boolean mVisible) {
+        this.mVisible = mVisible;
     }
 
 }
