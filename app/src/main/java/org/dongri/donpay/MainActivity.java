@@ -1,18 +1,23 @@
 package org.dongri.donpay;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,13 +26,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ListView listView = (ListView)findViewById(R.id.player_listview);
+    }
 
+    public void setApps() {
+        ListView listView = (ListView)findViewById(R.id.player_listview);
         ArrayList<PlayerListItem> listItems = new ArrayList<>();
 
         Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.app_origami);
-        PlayerListItem item = new PlayerListItem(bmp, "origami");
-        listItems.add(item);
+        PlayerListItem itemOrigami = new PlayerListItem(bmp, "origami");
+        listItems.add(itemOrigami);
 
         Bitmap bmpLine = BitmapFactory.decodeResource(getResources(), R.drawable.app_line);
         PlayerListItem itemLine = new PlayerListItem(bmpLine, "line");
@@ -57,9 +64,17 @@ public class MainActivity extends AppCompatActivity {
         PlayerListItem itemAlipay = new PlayerListItem(bmpAlipay, "alipay");
         listItems.add(itemAlipay);
 
-        PlayerListAdapter adapter = new PlayerListAdapter(this, R.layout.playerlist, listItems);
-        listView.setAdapter(adapter);
+        ArrayList<PlayerListItem> apps = new ArrayList<>();
 
+        SharedPreferences preferenceService = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        for(int i=0; i<listItems.size(); i++) {
+            Boolean isView = preferenceService.getBoolean(String.valueOf(i), true);
+            if (isView) {
+                apps.add(listItems.get(i));
+            }
+        }
+        PlayerListAdapter adapter = new PlayerListAdapter(this, R.layout.playerlist, apps);
+        listView.setAdapter(adapter);
     }
 
     @Override
@@ -73,12 +88,14 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.settingButton:
                 Intent intent = new Intent(this, SettingActivity.class);
-//                EditText editText = (EditText) findViewById(R.id.editText);
-//                String message = editText.getText().toString();
-//                intent.putExtra(EXTRA_MESSAGE, message);
                 startActivity(intent);
                 break;
         }
         return true;
+    }
+
+    public void onStart(){
+        super.onStart();
+        setApps();
     }
 }

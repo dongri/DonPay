@@ -1,14 +1,19 @@
 package org.dongri.donpay;
 
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.CompoundButton;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class SettingActivity extends AppCompatActivity {
 
@@ -17,13 +22,15 @@ public class SettingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
 
-        ListView listView = (ListView)findViewById(R.id.player_listview);
+        setTitle("表示設定");
+
+        ListView listView = (ListView)findViewById(R.id.player_settings);
 
         ArrayList<PlayerListItem> listItems = new ArrayList<>();
 
         Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.app_origami);
-        PlayerListItem item = new PlayerListItem(bmp, "origami");
-        listItems.add(item);
+        PlayerListItem itemOrigami = new PlayerListItem(bmp, "origami");
+        listItems.add(itemOrigami);
 
         Bitmap bmpLine = BitmapFactory.decodeResource(getResources(), R.drawable.app_line);
         PlayerListItem itemLine = new PlayerListItem(bmpLine, "line");
@@ -53,10 +60,29 @@ public class SettingActivity extends AppCompatActivity {
         PlayerListItem itemAlipay = new PlayerListItem(bmpAlipay, "alipay");
         listItems.add(itemAlipay);
 
-        PlayerListAdapter adapter = new PlayerListAdapter(this, R.layout.playerlist, listItems);
+        ArrayList<PlayerListItem> apps = new ArrayList<>();
+
+        SharedPreferences preferenceService = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        for(int i=0; i<listItems.size(); i++) {
+            PlayerListItem item = listItems.get(i);
+            Boolean isView = preferenceService.getBoolean(String.valueOf(i), true);
+            item.setVisible(isView);
+            apps.add(item);
+        }
+
+        PlayerSettingAdapter adapter = new PlayerSettingAdapter(this, R.layout.playersetting, apps);
         listView.setAdapter(adapter);
 
     }
+
+
+//    @Override
+//    public boolean onKeyDown(int keyCode, KeyEvent event) {
+//        if(keyCode==KeyEvent.KEYCODE_BACK){
+//
+//        }
+//        return false;
+//    }
 
 
 }
