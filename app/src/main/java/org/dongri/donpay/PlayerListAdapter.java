@@ -172,11 +172,11 @@ public class PlayerListAdapter extends ArrayAdapter<PlayerListItem> {
                                 new Handler().postDelayed(new Runnable() {
                                     @Override
                                     public void run() {
-                                        getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("origami://payment")));
+                                        getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("origami://payment_barcode")));
                                     }
                                 }, 2000);
                             } else {
-                                getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("origami://payment")));
+                                getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("origami://payment_barcode")));
                             }
                         } catch (ActivityNotFoundException e) {
                             toPlayStore("https://play.google.com/store/apps/details?id=co.origami.android");
