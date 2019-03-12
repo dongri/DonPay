@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.speech.tts.TextToSpeech;
 import android.view.LayoutInflater;
@@ -75,7 +76,17 @@ public class PlayerListAdapter extends ArrayAdapter<PlayerListItem> {
                 switch (item.getTitle()) {
                     case "origami":
                         try {
-                            getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("origami://payment")));
+                            if (isSound) {
+                                // 3秒後に処理を実行する
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("origami://payment")));
+                                    }
+                                }, 2000);
+                            } else {
+                                getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("origami://payment")));
+                            }
                         } catch (ActivityNotFoundException e) {
                             toPlayStore("https://play.google.com/store/apps/details?id=co.origami.android");
                         }
@@ -156,7 +167,17 @@ public class PlayerListAdapter extends ArrayAdapter<PlayerListItem> {
                 switch (item.getTitle()) {
                     case "origami":
                         try {
-                            getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("origami://payment_barcode")));
+                            if (isSound) {
+                                // 3秒後に処理を実行する
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("origami://payment")));
+                                    }
+                                }, 2000);
+                            } else {
+                                getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("origami://payment")));
+                            }
                         } catch (ActivityNotFoundException e) {
                             toPlayStore("https://play.google.com/store/apps/details?id=co.origami.android");
                         }

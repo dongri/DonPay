@@ -1,9 +1,11 @@
 package org.dongri.donpay;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.AudioManager;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.speech.tts.TextToSpeech;
@@ -24,6 +26,7 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity implements TextToSpeech.OnInitListener {
 
     private TextToSpeech tts;
+    private AudioManager audioManager;
 
     @Override
     public void onInit(int status) {
@@ -41,7 +44,6 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
         tts = new TextToSpeech(this, this);
 
         setContentView(R.layout.activity_main);
-
     }
 
     public void setApps() {
@@ -53,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
         listItems.add(itemOrigami);
 
         Bitmap bmpLine = BitmapFactory.decodeResource(getResources(), R.drawable.app_line);
-        PlayerListItem itemLine = new PlayerListItem(bmpLine, "line", 1, "らいん");
+        PlayerListItem itemLine = new PlayerListItem(bmpLine, "line", 1, "らいんぺい");
         listItems.add(itemLine);
 
         Bitmap bmpPayPay = BitmapFactory.decodeResource(getResources(), R.drawable.app_paypay);
@@ -113,6 +115,10 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
     public void onStart(){
         super.onStart();
         setApps();
+
+        audioManager = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
+        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, 10, 0);
+
     }
 
     public void playSound(String text) {
