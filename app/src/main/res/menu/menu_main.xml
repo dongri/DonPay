@@ -3,6 +3,6 @@
     <item
         android:id="@+id/settingButton"
         android:icon="@android:drawable/ic_input_add"
-        android:title="表示設定">
+        android:title="設定">
     </item>
 </menu>
