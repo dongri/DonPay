@@ -117,7 +117,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
         setApps();
 
         audioManager = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
-        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, audioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM), 0);
+        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, 20, 0);
     }
 
     public void playSound(String text) {
