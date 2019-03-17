@@ -100,7 +100,12 @@ public class PlayerListAdapter extends ArrayAdapter<PlayerListItem> {
                         break;
                     case "paypay":
                         try {
-                            getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("paypay://wallet/topup")));
+                            Intent intent = new Intent(Intent.ACTION_MAIN); //act
+                            intent.setAction("android.intent.category.LAUNCHER"); // cat
+                            intent.setClassName("jp.ne.paypay.android.app",
+                                    "jp.ne.paypay.android.app.MainActivity");
+                            getContext().startActivity(intent);
+                            // getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("paypay://wallet/topup")));
                         } catch (ActivityNotFoundException e) {
                             toPlayStore("https://play.google.com/store/apps/details?id=jp.ne.paypay.android.app");
                         }
@@ -191,7 +196,12 @@ public class PlayerListAdapter extends ArrayAdapter<PlayerListItem> {
                         break;
                     case "paypay":
                         try {
-                            getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("paypay://wallet/topup")));
+                            Intent intent = new Intent(Intent.ACTION_MAIN); //act
+                            intent.setAction("android.intent.category.LAUNCHER"); // cat
+                            intent.setClassName("jp.ne.paypay.android.app",
+                                    "jp.ne.paypay.android.app.MainActivity");
+                            getContext().startActivity(intent);
+                            // getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("paypay://wallet/topup")));
                         } catch (ActivityNotFoundException e) {
                             toPlayStore("https://play.google.com/store/apps/details?id=jp.ne.paypay.android.app");
                         }
