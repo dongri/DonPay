@@ -5,7 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.speech.tts.TextToSpeech;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
+import java.util.Locale;
 
 public class PlayerListAdapter extends ArrayAdapter<PlayerListItem> {
 
@@ -59,13 +62,31 @@ public class PlayerListAdapter extends ArrayAdapter<PlayerListItem> {
         } else {
             buttonScan.setVisibility(View.VISIBLE);
         }
+
+        final MainActivity activity = (MainActivity)getContext();
         buttonScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                int mIndex = item.getIndex();
+                SharedPreferences preferenceService = PreferenceManager.getDefaultSharedPreferences(getContext());
+                Boolean isSound = preferenceService.getBoolean("sound" + String.valueOf(mIndex), false);
+                if (isSound) {
+                    activity.playSound(item.getName());
+                }
                 switch (item.getTitle()) {
                     case "origami":
                         try {
-                            getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("origami://payment")));
+                            if (isSound) {
+                                // 3秒後に処理を実行する
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("origami://payment")));
+                                    }
+                                }, 2000);
+                            } else {
+                                getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("origami://payment")));
+                            }
                         } catch (ActivityNotFoundException e) {
                             toPlayStore("https://play.google.com/store/apps/details?id=co.origami.android");
                         }
@@ -79,7 +100,12 @@ public class PlayerListAdapter extends ArrayAdapter<PlayerListItem> {
                         break;
                     case "paypay":
                         try {
-                            getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("paypay://wallet/topup")));
+                            Intent intent = new Intent(Intent.ACTION_MAIN); //act
+                            intent.setAction("android.intent.category.LAUNCHER"); // cat
+                            intent.setClassName("jp.ne.paypay.android.app",
+                                    "jp.ne.paypay.android.app.MainActivity");
+                            getContext().startActivity(intent);
+                            // getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("paypay://wallet/topup")));
                         } catch (ActivityNotFoundException e) {
                             toPlayStore("https://play.google.com/store/apps/details?id=jp.ne.paypay.android.app");
                         }
@@ -137,10 +163,26 @@ public class PlayerListAdapter extends ArrayAdapter<PlayerListItem> {
         buttonQRcode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                int mIndex = item.getIndex();
+                SharedPreferences preferenceService = PreferenceManager.getDefaultSharedPreferences(getContext());
+                Boolean isSound = preferenceService.getBoolean("sound" + String.valueOf(mIndex), false);
+                if (isSound) {
+                    activity.playSound(item.getName());
+                }
                 switch (item.getTitle()) {
                     case "origami":
                         try {
-                            getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("origami://payment_barcode")));
+                            if (isSound) {
+                                // 3秒後に処理を実行する
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("origami://payment_barcode")));
+                                    }
+                                }, 2000);
+                            } else {
+                                getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("origami://payment_barcode")));
+                            }
                         } catch (ActivityNotFoundException e) {
                             toPlayStore("https://play.google.com/store/apps/details?id=co.origami.android");
                         }
@@ -154,7 +196,12 @@ public class PlayerListAdapter extends ArrayAdapter<PlayerListItem> {
                         break;
                     case "paypay":
                         try {
-                            getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("paypay://wallet/topup")));
+                            Intent intent = new Intent(Intent.ACTION_MAIN); //act
+                            intent.setAction("android.intent.category.LAUNCHER"); // cat
+                            intent.setClassName("jp.ne.paypay.android.app",
+                                    "jp.ne.paypay.android.app.MainActivity");
+                            getContext().startActivity(intent);
+                            // getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("paypay://wallet/topup")));
                         } catch (ActivityNotFoundException e) {
                             toPlayStore("https://play.google.com/store/apps/details?id=jp.ne.paypay.android.app");
                         }

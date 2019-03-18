@@ -52,15 +52,24 @@ public class PlayerSettingAdapter extends ArrayAdapter<PlayerListItem> {
         ImageView thumbnail = (ImageView)view.findViewById(R.id.appicon);
         thumbnail.setImageBitmap(item.getThumbnail());
 
-        Switch aSwitch = (Switch)view.findViewById(R.id.showswitch);
-
         final SharedPreferences preferenceService = PreferenceManager.getDefaultSharedPreferences(getContext().getApplicationContext());
-        aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+        Switch showSwitch = (Switch)view.findViewById(R.id.showswitch);
+        showSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 preferenceService.edit().putBoolean(String.valueOf(position), isChecked).commit();
             }
         });
-        aSwitch.setChecked(item.getVisible());
+        showSwitch.setChecked(item.getVisible());
+
+        Switch soundSwitch = (Switch)view.findViewById(R.id.soundswitch);
+        soundSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                preferenceService.edit().putBoolean("sound"+String.valueOf(position), isChecked).commit();
+            }
+        });
+        soundSwitch.setChecked(item.getSound());
+
         return view;
     }
 }

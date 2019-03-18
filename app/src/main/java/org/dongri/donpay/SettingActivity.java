@@ -22,42 +22,42 @@ public class SettingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
 
-        setTitle("表示設定");
+        setTitle("設定");
 
         ListView listView = (ListView)findViewById(R.id.player_settings);
 
         ArrayList<PlayerListItem> listItems = new ArrayList<>();
 
         Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.app_origami);
-        PlayerListItem itemOrigami = new PlayerListItem(bmp, "origami");
+        PlayerListItem itemOrigami = new PlayerListItem(bmp, "origami", 0, "おりがみぺい");
         listItems.add(itemOrigami);
 
         Bitmap bmpLine = BitmapFactory.decodeResource(getResources(), R.drawable.app_line);
-        PlayerListItem itemLine = new PlayerListItem(bmpLine, "line");
+        PlayerListItem itemLine = new PlayerListItem(bmpLine, "line", 1, "らいん");
         listItems.add(itemLine);
 
         Bitmap bmpPayPay = BitmapFactory.decodeResource(getResources(), R.drawable.app_paypay);
-        PlayerListItem itemPayPay = new PlayerListItem(bmpPayPay, "paypay");
+        PlayerListItem itemPayPay = new PlayerListItem(bmpPayPay, "paypay", 2, "ぺいぺい");
         listItems.add(itemPayPay);
 
         Bitmap bmpRakuten = BitmapFactory.decodeResource(getResources(), R.drawable.app_rakuten);
-        PlayerListItem itemRakuten = new PlayerListItem(bmpRakuten, "rakuten");
+        PlayerListItem itemRakuten = new PlayerListItem(bmpRakuten, "rakuten", 3, "らくてんぺい");
         listItems.add(itemRakuten);
 
         Bitmap bmpPayid = BitmapFactory.decodeResource(getResources(), R.drawable.app_payid);
-        PlayerListItem itemPayid = new PlayerListItem(bmpPayid, "payid");
+        PlayerListItem itemPayid = new PlayerListItem(bmpPayid, "payid", 4, "ペイアイティ");
         listItems.add(itemPayid);
 
         Bitmap bmpDpay = BitmapFactory.decodeResource(getResources(), R.drawable.app_dpay);
-        PlayerListItem itemDpay = new PlayerListItem(bmpDpay, "dpay");
+        PlayerListItem itemDpay = new PlayerListItem(bmpDpay, "dpay", 5, "ディばらい");
         listItems.add(itemDpay);
 
         Bitmap bmpPixiv = BitmapFactory.decodeResource(getResources(), R.drawable.app_pixiv);
-        PlayerListItem itemPixiv = new PlayerListItem(bmpPixiv, "pixiv");
+        PlayerListItem itemPixiv = new PlayerListItem(bmpPixiv, "pixiv", 6, "ピクシブ");
         listItems.add(itemPixiv);
 
         Bitmap bmpAlipay = BitmapFactory.decodeResource(getResources(), R.drawable.app_alipay);
-        PlayerListItem itemAlipay = new PlayerListItem(bmpAlipay, "alipay");
+        PlayerListItem itemAlipay = new PlayerListItem(bmpAlipay, "alipay", 7, "アリペイ");
         listItems.add(itemAlipay);
 
         ArrayList<PlayerListItem> apps = new ArrayList<>();
@@ -67,6 +67,8 @@ public class SettingActivity extends AppCompatActivity {
             PlayerListItem item = listItems.get(i);
             Boolean isView = preferenceService.getBoolean(String.valueOf(i), true);
             item.setVisible(isView);
+            Boolean isSound = preferenceService.getBoolean("sound"+String.valueOf(i), false);
+            item.setSound(isSound);
             apps.add(item);
         }
 
