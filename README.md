@@ -1,2 +1,2 @@
-playstore-key.jks を使用
+keystoreはkey-oldのplaystore-key.jksを使う
 

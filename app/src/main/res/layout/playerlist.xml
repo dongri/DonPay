@@ -3,7 +3,9 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff">
+    android:layout_marginBottom="20dp"
+    android:background="@drawable/border_line"
+    >
 
     <ImageView
         android:id="@+id/appicon"
@@ -11,57 +13,45 @@
         android:layout_height="100dp"
         android:padding="20dp" />
 
-
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/button_scan"
-        android:orientation="horizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="30dp">
-
-        <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:scaleType="centerCrop"
-            android:alpha="0.5"
-            android:src="@drawable/icon_scan" />
-
-        <TextView
-            android:id="@+id/scan_payment_explanation_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="5dp"
-            android:text="Scan"
-            />
-
-    </LinearLayout>
-
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/button_barcode"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="30dp">
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="20dp"
+        >
 
-        <ImageView
-            android:id="@+id/button_qrcode"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:scaleType="centerCrop"
-            android:alpha="0.5"
-            android:src="@drawable/icon_barcode" />
+        <!--<ImageView-->
+            <!--android:id="@+id/button_qrcode"-->
+            <!--android:layout_width="40dp"-->
+            <!--android:layout_height="40dp"-->
+            <!--android:scaleType="centerCrop"-->
+            <!--android:alpha="0.5"-->
+            <!--android:src="@drawable/icon_barcode" />-->
 
         <TextView
+            android:id="@+id/campaign_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            android:layout_marginLeft="0dp"
+            android:textColor="#ff000000"
+            android:textSize="13sp"
+            android:text="Campaign Title"
+            />
+
+        <TextView
+            android:id="@+id/campaign_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:layout_marginLeft="5dp"
-            android:text="Barcode"
+            android:layout_marginLeft="0dp"
+            android:textSize="11sp"
+            android:textColor="#ff999999"
+            android:text=""
+            android:paddingBottom="10dp"
             />
 
     </LinearLayout>

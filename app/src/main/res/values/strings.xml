@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">DonPay</string>
+    <string name="app_name">Pay Wallet</string>
+    <string name="no_campaign">キャンペーン情報なし</string>
+    <string name="indefinite_time">無期限</string>
 </resources>

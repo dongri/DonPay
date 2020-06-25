@@ -10,6 +10,10 @@ public class PlayerListItem {
     private String mName = null;
     private Boolean mVisible = true;
     private Boolean mSound = false;
+    private String mCampaignTitle = null;
+    private String mCampaignStartTime = "";
+    private String mCampaignEndTime = "";
+    private String mCampaignID = null;
 
     /**
      * 空のコンストラクタ
@@ -92,4 +96,35 @@ public class PlayerListItem {
         this.mSound = mSound;
     }
 
+    public String getCampaignTitle() {
+        return mCampaignTitle;
+    }
+
+    public void setCampaignTitle(String mCampaignTitle) {
+        this.mCampaignTitle = mCampaignTitle;
+    }
+
+    public String getCampaignStartTime() {
+        return mCampaignStartTime;
+    }
+
+    public void setCampaignStartTime(String mCampaignStartTime) {
+        this.mCampaignStartTime = mCampaignStartTime;
+    }
+
+    public String getCampaignEndTime() {
+        return mCampaignEndTime;
+    }
+
+    public void setCampaignEndTime(String mCampaignEndTime) {
+        this.mCampaignEndTime = mCampaignEndTime;
+    }
+
+    public String getCampaignID() {
+        return mCampaignID;
+    }
+
+    public void setCampaignID(String mCampaignID) {
+        this.mCampaignID = mCampaignID;
+    }
 }

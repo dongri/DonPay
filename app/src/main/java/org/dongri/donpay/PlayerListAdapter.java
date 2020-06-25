@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.speech.tts.TextToSpeech;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.w3c.dom.Text;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -51,20 +58,14 @@ public class PlayerListAdapter extends ArrayAdapter<PlayerListItem> {
             view = mInflater.inflate(mResource, null);
         }
 
+        final MainActivity activity = (MainActivity)getContext();
+
         final PlayerListItem item = mItems.get(position);
 
-        ImageView thumbnail = (ImageView)view.findViewById(R.id.appicon);
-        thumbnail.setImageBitmap(item.getThumbnail());
+        ImageView appicon = (ImageView)view.findViewById(R.id.appicon);
+        appicon.setImageBitmap(item.getThumbnail());
 
-        LinearLayout buttonScan = (LinearLayout)view.findViewById(R.id.button_scan);
-        if (item.getTitle().equals("dpay")) {
-            buttonScan.setVisibility(View.GONE);
-        } else {
-            buttonScan.setVisibility(View.VISIBLE);
-        }
-
-        final MainActivity activity = (MainActivity)getContext();
-        buttonScan.setOnClickListener(new View.OnClickListener() {
+        appicon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int mIndex = item.getIndex();
@@ -73,29 +74,38 @@ public class PlayerListAdapter extends ArrayAdapter<PlayerListItem> {
                 if (isSound) {
                     activity.playSound(item.getName());
                 }
+                postLaunch(item.getTitle());
                 switch (item.getTitle()) {
-                    case "origami":
+                    case "origamipay":
                         try {
+                            final Intent intent = new Intent(Intent.ACTION_MAIN); //act
+                            intent.setAction("android.intent.category.LAUNCHER"); // cat
+                            intent.setClassName("co.origami.android",
+                                    "co.origami.android.LaunchActivity");
                             if (isSound) {
                                 // 3秒後に処理を実行する
                                 new Handler().postDelayed(new Runnable() {
                                     @Override
                                     public void run() {
-                                        getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("origami://payment")));
+                                        getContext().startActivity(intent);
                                     }
                                 }, 2000);
                             } else {
-                                getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("origami://payment")));
+                                getContext().startActivity(intent);
                             }
                         } catch (ActivityNotFoundException e) {
                             toPlayStore("https://play.google.com/store/apps/details?id=co.origami.android");
                         }
                         break;
-                    case "line":
+                    case "linepay":
                         try {
-                            getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("line://nv/QRCodeReader")));
+                            Intent intent = new Intent(Intent.ACTION_MAIN); //act
+                            intent.setAction("android.intent.category.LAUNCHER"); // cat
+                            intent.setClassName("com.linepaycorp.talaria",
+                                    "com.linepaycorp.talaria.biz.main.MainActivity");
+                            getContext().startActivity(intent);
                         } catch (ActivityNotFoundException e) {
-                            toPlayStore("https://play.google.com/store/apps/details?id=jp.naver.line.android");
+                            toPlayStore("https://play.google.com/store/apps/details?id=com.linepaycorp.talaria");
                         }
                         break;
                     case "paypay":
@@ -105,23 +115,66 @@ public class PlayerListAdapter extends ArrayAdapter<PlayerListItem> {
                             intent.setClassName("jp.ne.paypay.android.app",
                                     "jp.ne.paypay.android.app.MainActivity");
                             getContext().startActivity(intent);
-                            // getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("paypay://wallet/topup")));
                         } catch (ActivityNotFoundException e) {
                             toPlayStore("https://play.google.com/store/apps/details?id=jp.ne.paypay.android.app");
                         }
                         break;
-                    case "rakuten":
-                        Intent intent = new Intent(Intent.ACTION_MAIN); //act
-                        intent.setAction("android.intent.category.LAUNCHER"); // cat
-                        intent.setClassName("jp.co.rakuten.pay",
-                                "jp.co.rakuten.wallet.activities.StartActivity");
+                    case "rakutenpay":
                         try {
+                            Intent intent = new Intent(Intent.ACTION_MAIN); //act
+                            intent.setAction("android.intent.category.LAUNCHER"); // cat
+                            intent.setClassName("jp.co.rakuten.pay",
+                                    "jp.co.rakuten.wallet.activities.StartActivity");
                             getContext().startActivity(intent);
                         } catch (ActivityNotFoundException e) {
                             toPlayStore("https://play.google.com/store/apps/details?id=jp.co.rakuten.pay");
                         }
                         break;
-                    case "payid":
+                    case "merpay":
+                        try {
+                            Intent intent = new Intent(Intent.ACTION_MAIN); //act
+                            intent.setAction("android.intent.category.LAUNCHER"); // cat
+                            intent.setClassName("com.kouzoh.mercari",
+                                    "com.kouzoh.mercari.activity.SplashActivity");
+                            getContext().startActivity(intent);
+                        } catch (ActivityNotFoundException e) {
+                            toPlayStore("https://play.google.com/store/apps/details?id=com.kouzoh.mercari");
+                        }
+                        break;
+                    case "dpay":
+                        try {
+                            Intent intent = new Intent(Intent.ACTION_MAIN); //act
+                            intent.setAction("android.intent.category.LAUNCHER"); // cat
+                            intent.setClassName("com.nttdocomo.keitai.payment",
+                                    "com.nttdocomo.keitai.payment.activity.DPYSplashActivity");
+                            getContext().startActivity(intent);
+                        } catch (ActivityNotFoundException e) {
+                            toPlayStore("https://play.google.com/store/apps/details?id=com.nttdocomo.keitai.payment");
+                        }
+                        break;
+                    case "yuchopay":
+                        try {
+                            Intent intent = new Intent(Intent.ACTION_MAIN); //act
+                            intent.setAction("android.intent.category.LAUNCHER"); // cat
+                            intent.setClassName("jp.japanpost.jp_bank.YuchoPayapp",
+                                    "jp.japanpost.jp_bank.YuchoPayapp.application.RootActivity");
+                            getContext().startActivity(intent);
+                        } catch (ActivityNotFoundException e) {
+                            toPlayStore("https://play.google.com/store/apps/details?id=jp.japanpost.jp_bank.YuchoPayapp");
+                        }
+                        break;
+                    case "famipay":
+                        try {
+                            Intent intent = new Intent(Intent.ACTION_MAIN); //act
+                            intent.setAction("android.intent.category.LAUNCHER"); // cat
+                            intent.setClassName("jp.co.family.familymart_app",
+                                    "jp.co.family.familymart.presentation.splash.SplashActivity");
+                            getContext().startActivity(intent);
+                        } catch (ActivityNotFoundException e) {
+                            toPlayStore("https://play.google.com/store/apps/details?id=jp.co.family.familymart_app");
+                        }
+                        break;
+                    case "payidpay":
                         Intent intentPayid = new Intent(Intent.ACTION_MAIN); //act
                         intentPayid.setAction("android.intent.category.LAUNCHER"); // cat
                         intentPayid.setClassName("pay.jp.payid",
@@ -132,7 +185,7 @@ public class PlayerListAdapter extends ArrayAdapter<PlayerListItem> {
                             toPlayStore("https://play.google.com/store/apps/details?id=pay.jp.payid");
                         }
                         break;
-                    case "pixiv":
+                    case "pixivpay":
                         Intent intentPixiv = new Intent(Intent.ACTION_MAIN); //act
                         intentPixiv.setAction("android.intent.category.LAUNCHER"); // cat
                         intentPixiv.setClassName("jp.pxv.pay",
@@ -143,99 +196,76 @@ public class PlayerListAdapter extends ArrayAdapter<PlayerListItem> {
                             toPlayStore("https://play.google.com/store/apps/details?id=jp.pxv.pay");
                         }
                         break;
+                    case "kyashpay":
+                        try {
+                            Intent intent = new Intent(Intent.ACTION_MAIN); //act
+                            intent.setAction("android.intent.category.LAUNCHER"); // cat
+                            intent.setClassName("co.kyash",
+                                    "co.kyash.ui.splash.SplashActivity");
+                            getContext().startActivity(intent);
+                        } catch (ActivityNotFoundException e) {
+                            toPlayStore("https://play.google.com/store/apps/details?id=co.kyash");
+                        }
+                        break;
+                    case "googlepay":
+                        try {
+                            Intent intent = new Intent(Intent.ACTION_MAIN); //act
+                            intent.setAction("android.intent.category.LAUNCHER"); // cat
+                            intent.setClassName("com.google.android.apps.walletnfcrel",
+                                    "com.google.commerce.tapandpay.android.cardlist.CardListActivity");
+                            getContext().startActivity(intent);
+                        } catch (ActivityNotFoundException e) {
+                            toPlayStore("https://play.google.com/store/apps/details?id=com.google.android.apps.walletnfcrel");
+                        }
+                        break;
                     case "alipay":
                         try {
-                            getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("alipays://platformapi/startapp?appId=10000007&source=nougat_shortcut_scan")));
+                            getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("alipays://platformapi/startapp")));
                         } catch (ActivityNotFoundException e) {
                             toPlayStore("https://play.google.com/store/apps/details?id=com.eg.android.AlipayGphone");
+                        }
+                        break;
+                    case "wechatpay":
+                        try {
+                            Intent intent = new Intent(Intent.ACTION_MAIN); //act
+                            intent.setAction("android.intent.category.LAUNCHER"); // cat
+                            intent.setClassName("com.tencent.mm",
+                                    "com.tencent.mm.ui.LauncherUI");
+                            getContext().startActivity(intent);
+                        } catch (ActivityNotFoundException e) {
+                            toPlayStore("https://play.google.com/store/apps/details?id=com.tencent.mm");
                         }
                         break;
                 }
             }
         });
 
-        LinearLayout buttonQRcode = (LinearLayout)view.findViewById(R.id.button_barcode);
-        if (item.getTitle().equals("payid") || item.getTitle().equals("pixiv")) {
-            buttonQRcode.setVisibility(View.GONE);
+        //LinearLayout appicon = (LinearLayout)view.findViewById(R.id.appicon);
+
+        TextView campaignTitle = (TextView)view.findViewById(R.id.campaign_title);
+        campaignTitle.setText(item.getCampaignTitle());
+
+        TextView campaignTime = (TextView)view.findViewById(R.id.campaign_time);
+        String st = item.getCampaignStartTime();
+        String et = item.getCampaignEndTime();
+        String t = "";
+        if (st != "") {
+            t = st + " ~ " + et;
         } else {
-            buttonQRcode.setVisibility(View.VISIBLE);
+            if (campaignTitle.getText().equals(getContext().getString(R.string.no_campaign))) {
+                t = "";
+            } else if (!campaignTitle.getText().equals("")){
+                t = getContext().getString(R.string.indefinite_time);
+            }
         }
-        buttonQRcode.setOnClickListener(new View.OnClickListener() {
+        campaignTime.setText(t);
+
+        campaignTitle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int mIndex = item.getIndex();
-                SharedPreferences preferenceService = PreferenceManager.getDefaultSharedPreferences(getContext());
-                Boolean isSound = preferenceService.getBoolean("sound" + String.valueOf(mIndex), false);
-                if (isSound) {
-                    activity.playSound(item.getName());
-                }
-                switch (item.getTitle()) {
-                    case "origami":
-                        try {
-                            if (isSound) {
-                                // 3秒後に処理を実行する
-                                new Handler().postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("origami://payment_barcode")));
-                                    }
-                                }, 2000);
-                            } else {
-                                getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("origami://payment_barcode")));
-                            }
-                        } catch (ActivityNotFoundException e) {
-                            toPlayStore("https://play.google.com/store/apps/details?id=co.origami.android");
-                        }
-                        break;
-                    case "line":
-                        try {
-                            getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("line://pay/generateQR")));
-                        } catch (ActivityNotFoundException e) {
-                            toPlayStore("https://play.google.com/store/apps/details?id=jp.naver.line.android");
-                        }
-                        break;
-                    case "paypay":
-                        try {
-                            Intent intent = new Intent(Intent.ACTION_MAIN); //act
-                            intent.setAction("android.intent.category.LAUNCHER"); // cat
-                            intent.setClassName("jp.ne.paypay.android.app",
-                                    "jp.ne.paypay.android.app.MainActivity");
-                            getContext().startActivity(intent);
-                            // getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("paypay://wallet/topup")));
-                        } catch (ActivityNotFoundException e) {
-                            toPlayStore("https://play.google.com/store/apps/details?id=jp.ne.paypay.android.app");
-                        }
-                        break;
-                    case "rakuten":
-                        Intent intent = new Intent(Intent.ACTION_MAIN); //act
-                        intent.setAction("android.intent.category.LAUNCHER"); // cat
-                        intent.setClassName("jp.co.rakuten.pay",
-                                "jp.co.rakuten.wallet.activities.StartActivity");
-                        try {
-                            getContext().startActivity(intent);
-                        } catch (ActivityNotFoundException e) {
-                            toPlayStore("https://play.google.com/store/apps/details?id=jp.co.rakuten.pay");
-                        }
-                        break;
-                    case "dpay":
-                        Intent intentDpay = new Intent(Intent.ACTION_MAIN); //act
-                        intentDpay.setAction("android.intent.category.LAUNCHER"); // cat
-                        intentDpay.setClassName("com.nttdocomo.keitai.payment",
-                                "com.nttdocomo.keitai.payment.activity.DPYSplashActivity");
-                        try {
-                            getContext().startActivity(intentDpay);
-                        } catch (ActivityNotFoundException e) {
-                            toPlayStore("https://play.google.com/store/apps/details?id=com.nttdocomo.keitai.payment");
-                        }
-                        break;
-                    case "alipay":
-                        try {
-                            getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("alipays://platformapi/startapp?appId=20000056&source=nougat_shortcut_barcode")));
-                        } catch (ActivityNotFoundException e) {
-                            toPlayStore("https://play.google.com/store/apps/details?id=com.eg.android.AlipayGphone");
-                        }
-                        break;
-                }
+                Intent intent = new Intent(getContext(), WebViewActivity.class);
+                intent.putExtra( "campaign_id", item.getCampaignID());
+                getContext().startActivity(intent);
             }
         });
 
@@ -246,5 +276,28 @@ public class PlayerListAdapter extends ArrayAdapter<PlayerListItem> {
         Uri uri = Uri.parse(url);
         Intent i = new Intent(Intent.ACTION_VIEW,uri);
         getContext().startActivity(i);
+    }
+
+    private void postLaunch(String appName) {
+        String uri = "https://pay.hackerth.com/api/launch?app_name=" + appName + "&platform=android";
+
+        AsyncJsonLoader asyncJsonLoader = new AsyncJsonLoader(new AsyncJsonLoader.AsyncCallback() {
+            // 実行前
+            public void preExecute() {
+            }
+            // 実行後
+            public void postExecute(JSONObject result) {
+                Log.d("Launch", "finished");
+            }
+
+            public void progressUpdate(int progress) {
+            }
+
+            public void cancel() {
+            }
+        });
+
+        asyncJsonLoader.execute(uri);
+
     }
 }
